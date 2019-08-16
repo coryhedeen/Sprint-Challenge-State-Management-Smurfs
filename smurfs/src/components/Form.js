@@ -32,7 +32,7 @@ const FormikForm = withFormik({
 
   handleSubmit(values){
     axios
-      .post('http://localhost:3333/smurfs')
+      .post('http://localhost:3333/smurfs', values)
       .then(res => {
         console.log(res)
       })

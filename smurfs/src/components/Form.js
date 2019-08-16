@@ -1,45 +1,45 @@
 import React, { useState } from 'react';
+import { Form, Field, withFormik } from 'formik';
+import axios from 'axios';
 
-
-const Form = props => {
+const ListForm = props => {
 
   const [input, setInput] = useState({name: '', age: '', height: ''})
 
 const changeHandler = event => {
-  setInput([event.target.name]: event.target.value)
+  setInput({[event.target.name]: event.target.value})
 }
 
   return (
-    <form>
-      <label>
-        Name:
-        <input
-          type="text"
-          name="name"
-          value={input.name}
-          onChange={changeHandler}
-        />
-      </label>
-      <label>
-        Age:
-        <input
-          type="text"
-          name="age"
-          value={input.age}
-          onChange={changeHandler}
-        />
-      </label>
-      <label>
-        Height:
-        <input
-          type="text"
-          name="height"
-          value={input.height}
-          onChange={changeHandler}
-        />
-      </label>
-    </form>
+    <Form>
+      <Field type="text" name="name" placeholder="name"/>
+      <Field type="text" name="age" placeholder="age"/>
+      <Field type="text" name="height" placeholder="height"/>
+      <button type='submit'>Submit</button>
+    </Form>
   )
 }
 
-export default Form;
+const FormikForm = withFormik({
+  mapPropsToValues(values){
+    return {
+      name: values.name || '',
+      age: values.age || '',
+      height: values.height || '',
+
+    }
+  },
+
+  handleSubmit(values){
+    axios
+      .post('http://localhost:3333/smurfs')
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+})(ListForm);
+
+export default FormikForm;
